@@ -55,16 +55,22 @@ public class PlayServicesValidator {
 
             File integersFilePath = this.getIntegersFilePath(apkFile);
 
-            List<IntegerRes> integerResList = this.readPlayServicesVersion(integersFilePath);
+            if (integersFilePath == null) {
+            	System.out.println("Show result for file: " + apkFile.getName());
+                System.out.println("Integers file not exists. Verify inside AndroidManifest.xml ");
+            } else {
+            	 List<IntegerRes> integerResList = this.readPlayServicesVersion(integersFilePath);
 
-            for (IntegerRes integerRes : integerResList) {
+                 for (IntegerRes integerRes : integerResList) {
 
-                if ("google_play_services_version".equals(integerRes.getName())) {
-                    System.out.println("Show result for file: " + apkFile.getName());
-                    System.out.println(integerRes.getName() + ":" + integerRes.getValue());
-                    break;
-                }
+                     if ("google_play_services_version".equals(integerRes.getName())) {
+                         System.out.println("Show result for file: " + apkFile.getName());
+                         System.out.println(integerRes.getName() + ":" + integerRes.getValue());
+                         break;
+                     }
+                 }
             }
+           
 
 
             //System.out.println(commandResult);
@@ -77,7 +83,8 @@ public class PlayServicesValidator {
         if (file.exists()) {
             return file;
         }
-        throw new RuntimeException("Integers file not exists for '" + fileName + "'. Verify inside AndroidManifest.xml ");
+        return null;
+        //throw new RuntimeException("Integers file not exists for '" + fileName + "'. Verify inside AndroidManifest.xml ");
     }
 
     private String decompile(File apkFile) {
